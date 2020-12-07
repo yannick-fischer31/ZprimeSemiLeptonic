@@ -3,7 +3,7 @@
 
 <!ENTITY TargetLumi      "41530"> 
 <!--<!ENTITY PRESELdir       "/nfs/dust/cms/user/deleokse/RunII_102X_v2/ZPrime_2017/Preselection_2017/">-->
-<!ENTITY PRESELdir       "/nfs/dust/cms/group/zprime-uhh/Presel_2017/">
+<!ENTITY PRESELdir       "/nfs/dust/cms/group/zprime-uhh/Presel_2017_noMETcut/">
 <!ENTITY b_Cacheable     "False">
 <!ENTITY NEVT            "-1">
 <!ENTITY IS_PUPPI        "true">
