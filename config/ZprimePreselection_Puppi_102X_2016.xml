@@ -384,7 +384,7 @@
             <OutputTree Name="AnalysisTree"/>
           </InputData>
 
-          <InputData Lumi="98743.59466" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT2000toInf_2016v3" Cacheable="&b_Cacheable;">
+          <InputData Lumi="235651.7036" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT2000toInf_2016v3" Cacheable="&b_Cacheable;">
             &QCD_HT2000toInf_2016v3;
             <InputTree Name="AnalysisTree"/>
             <OutputTree Name="AnalysisTree"/>

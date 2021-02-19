@@ -8,7 +8,7 @@
 
 <!ENTITY IS_PUPPI            "true">
 <!ENTITY IS_LOOSER_SELECTION "false">
-<!ENTITY CHANNEL             "electron">
+<!ENTITY CHANNEL             "muon">
 <!ENTITY OUTPUTdir           "/nfs/dust/cms/user/deleokse/RunII_102X_v2/ZPrime_2016/Analysis_2016_noQCD/&CHANNEL;/">
 
 
@@ -109,44 +109,46 @@
 
   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&OUTPUTdir;/" PostFix="" TargetLumi="&TargetLumi;">
 
-          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3B_blinded" Cacheable="&b_Cacheable;">
-            &DATA_SingleElectron_Run2016v3B;
+
+
+          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleMuon_Run2016v3B_blinded" Cacheable="&b_Cacheable;">
+            &DATA_SingleMuon_Run2016v3B;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
-          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3C_blinded" Cacheable="&b_Cacheable;">
-            &DATA_SingleElectron_Run2016v3C;
+          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleMuon_Run2016v3C_blinded" Cacheable="&b_Cacheable;">
+            &DATA_SingleMuon_Run2016v3C;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
-          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3D_blinded" Cacheable="&b_Cacheable;">
-            &DATA_SingleElectron_Run2016v3D;
+          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleMuon_Run2016v3D_blinded" Cacheable="&b_Cacheable;">
+            &DATA_SingleMuon_Run2016v3D;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
-          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3E_blinded" Cacheable="&b_Cacheable;">
-            &DATA_SingleElectron_Run2016v3E;
+          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleMuon_Run2016v3E_blinded" Cacheable="&b_Cacheable;">
+            &DATA_SingleMuon_Run2016v3E;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
-          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3F_blinded" Cacheable="&b_Cacheable;">
-            &DATA_SingleElectron_Run2016v3F;
+          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleMuon_Run2016v3F_blinded" Cacheable="&b_Cacheable;">
+            &DATA_SingleMuon_Run2016v3F;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
-          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3G_blinded" Cacheable="&b_Cacheable;">
-            &DATA_SingleElectron_Run2016v3G;
+          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleMuon_Run2016v3G_blinded" Cacheable="&b_Cacheable;">
+            &DATA_SingleMuon_Run2016v3G;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
-          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3H_blinded" Cacheable="&b_Cacheable;">
-            &DATA_SingleElectron_Run2016v3H;
+          <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleMuon_Run2016v3H_blinded" Cacheable="&b_Cacheable;">
+            &DATA_SingleMuon_Run2016v3H;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
