@@ -4,7 +4,7 @@
 
 <!ENTITY TargetLumi      "35920">
 <!--<!ENTITY PRESELdir       "/nfs/dust/cms/user/deleokse/RunII_102X_v2/ZPrime_2016/Preselection_2016/">-->
-<!ENTITY PRESELdir       "/nfs/dust/cms/group/zprime-uhh/Presel_2016_noMETcut/">
+<!ENTITY PRESELdir       "/nfs/dust/cms/group/zprime-uhh/Presel_2016/">
 <!ENTITY b_Cacheable     "False">
 <!ENTITY NEVT            "-1">
 <!ENTITY IS_PUPPI        "true">
@@ -105,7 +105,7 @@
 	<Package Name="SUHH2ZprimeSemiLeptonic.par"/>
 
 	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;">
-
+<!--
           <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_SingleElectron_Run2016v3B" Cacheable="&b_Cacheable;">
             &DATA_SingleElectron_Run2016v3B;
             <InputTree Name="AnalysisTree" />
@@ -383,14 +383,14 @@
             <InputTree Name="AnalysisTree"/>
             <OutputTree Name="AnalysisTree"/>
           </InputData>
-
+-->
           <InputData Lumi="235651.7036" NEventsMax="&NEVT;" Type="MC" Version="QCD_HT2000toInf_2016v3" Cacheable="&b_Cacheable;">
             &QCD_HT2000toInf_2016v3;
             <InputTree Name="AnalysisTree"/>
             <OutputTree Name="AnalysisTree"/>
           </InputData>
 
-
+<!--
 
           <InputData Lumi="92260.16399" NEventsMax="&NEVT;" Type="MC" Version="TT_TuneCUETP8M2T4_2016v3" Cacheable="&b_Cacheable;">
             &TT_TuneCUETP8M2T4_2016v3;
@@ -553,7 +553,7 @@
             <OutputTree Name="AnalysisTree" />
           </InputData>
 
-
+-->
 
 		<UserConfig>
 			<Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices"/>
