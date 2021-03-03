@@ -9,7 +9,7 @@
 <!ENTITY IS_PUPPI            "true">
 <!ENTITY IS_LOOSER_SELECTION "false">
 <!ENTITY CHANNEL             "electron">
-<!ENTITY OUTPUTdir           "/nfs/dust/cms/user/deleokse/RunII_102X_v2/ZPrime_2018/Analysis_test/&CHANNEL;/">
+<!ENTITY OUTPUTdir           "/nfs/dust/cms/user/deleokse/RunII_102X_v2/ZPrime_Original/ZPrime_2018/Analysis_test/&CHANNEL;/">
 
 <!ENTITY DATA_EGamma_Run2018A       SYSTEM  "../data/Skimming_datasets_2018/DATA_DATA_EGamma_Run2018A_withoutEmptyNtuples.xml">
 <!ENTITY DATA_SingleMuon_Run2018A   SYSTEM  "../data/Skimming_datasets_2018/DATA_DATA_SingleMuon_Run2018A_withoutEmptyNtuples.xml">
@@ -127,7 +127,7 @@
 
 <!--
 <ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="50" AutoResubmit="0"/>
-<ConfigSGE RAM="2" DISK="2" Mail="ksenia.de.leo@desy.de" Notification="as" Workdir="workdir_Zprime_Analysis_2018"/>
+<ConfigSGE RAM="2" DISK="2" Mail="ksenia.de.leo@desy.de" Notification="as" Workdir="workdir_Zprime_Analysis_2018_electron"/>
 -->
 
 <JobConfiguration JobName="ZprimePreselectionJob" OutputLevel="INFO">
@@ -743,6 +743,8 @@
 
       <Item Name="BTagCalibration" Value = "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/DeepJet_102XSF_V2.csv" />
 
+      <Item Name="NLOCorrections" Value = "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/ZprimeSemiLeptonic/data/" />
+
       <Item Name="is_puppi" Value="&IS_PUPPI;"/>
       <Item Name="is_looser_selection" Value="&IS_LOOSER_SELECTION;"/>
 
@@ -750,10 +752,12 @@
       <Item Name="use_sframe_weight"  Value="false"/>
       <Item Name="jersmear_direction" Value="nominal"/>
       <Item Name="jecsmear_direction" Value="nominal"/>
-      <Item Name="ScaleVariationMuR" Value="nominal"/>
-      <Item Name="ScaleVariationMuF" Value="nominal"/>
+      <Item Name="ScaleVariationMuR"  Value="nominal"/>
+      <Item Name="ScaleVariationMuF"  Value="nominal"/>
       <Item Name="Sys_MuonID"         Value="nominal"/>
       <Item Name="Sys_MuonTrigger"    Value="nominal"/>
+      <Item Name="Sys_EleID"          Value="nominal"/>
+      <Item Name="Sys_EleTrigger"     Value="nominal"/>
       <Item Name="Sys_PU"             Value="central"/>
       <Item Name="Sys_BTagSF"         Value="nominal"/>
       <Item Name="channel"            Value="&CHANNEL;"/>
