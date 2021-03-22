@@ -415,8 +415,10 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   }
   if((event.muons->size()+event.electrons->size()) != 1) return false; //veto events without leptons or with too many 
   if(debug) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
-  if(!TwoDCut_selection->passes(event)) return false;
-  fill_histograms(event, "TwoDCut");
+ 
+// No TwoD cut -> QCD removed with QCD NN
+//  if(!TwoDCut_selection->passes(event)) return false;
+//  fill_histograms(event, "TwoDCut");
 
   // Here, the Zprime must be reconstructed (we ensured to have >= 2 AK4 jets, >= 1 muon)
   // Only consider well-separated AK4 jets
@@ -461,7 +463,7 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   Variables_module->process(event);
   fill_histograms(event, "NNInputsBeforeReweight");
 
-  if(TTbarMatchable_selection->passes(event)) fill_histograms(event, "MatchableBeforeChi2Cut");
+/*  if(TTbarMatchable_selection->passes(event)) fill_histograms(event, "MatchableBeforeChi2Cut");
   else fill_histograms(event, "NotMatchableBeforeChi2Cut");
   if(debug) cout<<"TTbarMatchable_selection is ok"<<endl;
 
@@ -523,6 +525,7 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   }
   event.set(h_NPV,event.pvs->size());
   if(debug) cout<<"Set some vars for monitoring"<<endl;
+*/
   return true;
 }
 
