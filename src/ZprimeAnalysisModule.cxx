@@ -164,7 +164,7 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   double jet1_pt(150.);
   double jet2_pt(50.);
   double chi2_max(30.);
-  double mtt_blind(3000.);
+  double mtt_blind(2000.);
   int nmuon_min1, nmuon_max1;
   int nmuon_min2, nmuon_max2;
   int nele_min, nele_max;
@@ -254,15 +254,15 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   // Electron
   if((is2016v3 || is2016v2) && isElectron){
     EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/egammaEffi.txt_EGM2D_CutBased_Tight_ID.root", 1.0, "TightID", Sys_EleID));
-    //EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/", 0.5, "Trigger", Sys_EleTrigger));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/SF_Ele50_Ele115_2016.root", 0.5, "Trigger", Sys_EleTrigger));
   }
   if(is2017v2 && isElectron){
     EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/2017_ElectronTight.root", 1.0, "TightID", Sys_EleID));
-    //EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/", 0.5, "Trigger", Sys_EleTrigger));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/SF_Ele50_Ele115_2017.root", 0.5, "Trigger", Sys_EleTrigger));
   }
   if(is2018 && isElectron){
     EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/2018_ElectronTight.root", 1.0, "TightID", Sys_EleID));
-    //EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/", 0.5, "Trigger", Sys_EleTrigger));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/SF_Ele50_Ele115_2018.root", 0.5, "Trigger", Sys_EleTrigger));
   }
 
   // Selection modules
@@ -410,8 +410,8 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   if(isElectron){
     if(!NElectron_selection->passes(event)) return false;
     fill_histograms(event, "Electron1");
-    //EleTrigger_module->process(event);
-    //fill_histograms(event, "TriggerEle");
+    EleTrigger_module->process(event);
+    fill_histograms(event, "TriggerEle");
   }
   if((event.muons->size()+event.electrons->size()) != 1) return false; //veto events without leptons or with too many 
   if(debug) cout<<"N leptons ok: Nelectrons="<<event.electrons->size()<<" Nmuons="<<event.muons->size()<<endl;
