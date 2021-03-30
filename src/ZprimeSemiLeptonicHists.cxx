@@ -27,11 +27,7 @@ Hists(ctx, dirname) {
   h_BestZprimeCandidateCorrectMatch = ctx.get_handle<ZprimeCandidate*>("ZprimeCandidateBestCorrectMatch");
   h_is_zprime_reconstructed_chi2 = ctx.get_handle<bool>("is_zprime_reconstructed_chi2");
   h_is_zprime_reconstructed_correctmatch = ctx.get_handle<bool>("is_zprime_reconstructed_correctmatch");
-/*  h_NNoutput0 = ctx.get_handle<double>("NNoutput0");
-  h_NNoutput1 = ctx.get_handle<double>("NNoutput1");
-  h_NNoutput2 = ctx.get_handle<double>("NNoutput2");
-  h_NNoutput3 = ctx.get_handle<double>("NNoutput3");
-*/
+  //h_NNoutput0 = ctx.get_handle<double>("NNoutput0");
   //  h_chi2 = ctx.get_handle<float>("chi2");
   init();
 }
@@ -472,12 +468,7 @@ void ZprimeSemiLeptonicHists::init(){
   NN_M_tt_notweighted = book<TH1F>("NN_M_tt_notweighted", "NN_M_tt_notweighted", 100, 0, 14000);
 
 
-/*
-  DNN_out0 = book<TH1F>("DNN_out0", "NN output 0", 100, 0, 1);
-  DNN_out1 = book<TH1F>("DNN_out1", "NN output 1", 100, 0, 1);
-  DNN_out2 = book<TH1F>("DNN_out2", "NN output 2", 100, 0, 1);
-  DNN_out3 = book<TH1F>("DNN_out3", "NN output 3", 100, 0, 1);
-*/
+  //QCD_out0 = book<TH1F>("QCD_out0", "QCD NN output 0", 100, 0, 1);
 }
 
 
@@ -1228,36 +1219,11 @@ void ZprimeSemiLeptonicHists::fill(const Event & event){
     NN_M_tt_notweighted->Fill(Mass_tt);
   }
 
-/// DNN score
-/*
-  double output0= event.get(h_NNoutput0);
-  double output1= event.get(h_NNoutput1);
-  double output2= event.get(h_NNoutput2);
-  double output3= event.get(h_NNoutput3);
-
-  vector<double> output_event = {output0, output1, output2, output3};
-
-  double maxval_score = 0.0;
-  for ( int i = 0; i < 4; i++ ) {
-    if ( output_event[i] > maxval_score) {
-    maxval_score = output_event[i];
-    }
-  } 
-
-  if( output0 == maxval_score ){ 
-     DNN_out0->Fill(output0, weight);
-  }
-  if( output1 == maxval_score ){ 
-     DNN_out1->Fill(output1, weight);
-  }
-  if( output2 == maxval_score ){ 
-     DNN_out2->Fill(output2, weight);
-  }
-  if( output3 == maxval_score ){ 
-     DNN_out3->Fill(output3, weight);
-  }
-*/
-
+// QCD NN score
+//
+//  double NNoutput0= event.get(h_NNoutput0);
+//  QCD_out0->Fill(NNoutput0, weight);
+  
 
 } //Method
 

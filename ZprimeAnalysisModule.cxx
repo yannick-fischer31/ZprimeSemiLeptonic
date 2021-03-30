@@ -185,7 +185,7 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
     nmuon_min2 = 1, nmuon_max2 = 1;
     nele_min = 0; nele_max = 0;
     MET_cut = 50;
-    jet1_pt = 150.;
+    jet1_pt = 100.;
     HT_lep_cut = 150;
   }
   if(isElectron){//semileptonic electron channel
@@ -233,7 +233,7 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   PUWeight_module.reset(new MCPileupReweight(ctx, Sys_PU));
   //BTagWeight_module.reset(new MCBTagDiscriminantReweighting(ctx, btag_algo, "jets", Sys_btag));
   TopPtReweight_module.reset(new TopPtReweight(ctx, a_toppt, b_toppt));
-  MCScale_module.reset(new MCScaleVariation(ctx));
+  //MCScale_module.reset(new MCScaleVariation(ctx));
   Corrections_module.reset(new NLOCorrections(ctx));
 
 
@@ -254,15 +254,15 @@ ZprimeAnalysisModule::ZprimeAnalysisModule(uhh2::Context& ctx){
   // Electron
   if((is2016v3 || is2016v2) && isElectron){
     EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/egammaEffi.txt_EGM2D_CutBased_Tight_ID.root", 1.0, "TightID", Sys_EleID));
-    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2016/SF_Ele50_Ele115_2016.root", 0.5, "Trigger", Sys_EleTrigger));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/ZprimeSemiLeptonic/data/SF_Ele50_Ele115_2016.root", 0.5, "Trigger", Sys_EleTrigger, "electrons", "abseta_pt_ratio"));
   }
   if(is2017v2 && isElectron){
     EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/2017_ElectronTight.root", 1.0, "TightID", Sys_EleID));
-    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2017/SF_Ele50_Ele115_2017.root", 0.5, "Trigger", Sys_EleTrigger));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/ZprimeSemiLeptonic/data/SF_Ele50_Ele115_2017.root", 0.5, "Trigger", Sys_EleTrigger, "electrons", "abseta_pt_ratio"));
   }
   if(is2018 && isElectron){
     EleID_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/2018_ElectronTight.root", 1.0, "TightID", Sys_EleID));
-    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/common/data/2018/SF_Ele50_Ele115_2018.root", 0.5, "Trigger", Sys_EleTrigger));
+    EleTrigger_module.reset(new MCElecScaleFactor(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/ZprimeSemiLeptonic/data/SF_Ele50_Ele115_2018.root", 0.5, "Trigger", Sys_EleTrigger, "electrons", "abseta_pt_ratio"));
   }
 
   // Selection modules
@@ -388,15 +388,15 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
   if(debug)  cout<<"LumiWeight ok"<<endl;
   fill_histograms(event, "Weights_Lumi");
 
-  TopPtReweight_module->process(event);
-  fill_histograms(event, "Weights_TopPt");
-
-  MCScale_module->process(event);
-  fill_histograms(event, "Weights_MCScale");
-
-  // Higher order corrections - EWK & QCD NLO
-  Corrections_module->process(event);
-  fill_histograms(event, "NLOCorrections");
+//  TopPtReweight_module->process(event);
+//  fill_histograms(event, "Weights_TopPt");
+//
+//  MCScale_module->process(event);
+//  fill_histograms(event, "Weights_MCScale");
+//
+//  // Higher order corrections - EWK & QCD NLO
+//  Corrections_module->process(event);
+//  fill_histograms(event, "NLOCorrections");
  
   if(!(Trigger1_selection->passes(event)|| Trigger2_selection->passes(event))) return false;
   if(isMuon){
@@ -458,6 +458,9 @@ bool ZprimeAnalysisModule::process(uhh2::Event& event){
     fill_histograms(event, "HTlep");
     if(debug) cout<<"HTlep is ok"<<endl;
   }
+
+  if(!TwoDCut_selection->passes(event)) return false;
+  fill_histograms(event, "TwoDCut");
 
   //  Variables for NN 
   Variables_module->process(event);

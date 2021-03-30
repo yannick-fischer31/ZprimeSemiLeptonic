@@ -37,7 +37,7 @@ TH1F *NPV, *MET, *MET_rebin, *MET_rebin2, *MET_rebin3, *ST, *ST_rebin, *ST_rebin
 
 TH1F *NN_Mu_pt, *NN_Mu_eta, *NN_Mu_phi, *NN_Mu_E, *NN_Ele_pt, *NN_Ele_eta, *NN_Ele_phi, *NN_Ele_E, *NN_MET_pt, *NN_MET_phi, *NN_N_Ak4, *NN_Ak4_j1_pt, *NN_Ak4_j1_eta, *NN_Ak4_j1_phi, *NN_Ak4_j1_E, *NN_Ak4_j1_m, *NN_Ak4_j1_btag, *NN_Ak4_j2_pt, *NN_Ak4_j2_eta, *NN_Ak4_j2_phi, *NN_Ak4_j2_E, *NN_Ak4_j2_m, *NN_Ak4_j2_btag, *NN_Ak4_j3_pt, *NN_Ak4_j3_eta, *NN_Ak4_j3_phi, *NN_Ak4_j3_E, *NN_Ak4_j3_m, *NN_Ak4_j3_btag, *NN_Ak4_j4_pt, *NN_Ak4_j4_eta, *NN_Ak4_j4_phi, *NN_Ak4_j4_E, *NN_Ak4_j4_m, *NN_Ak4_j4_btag, *NN_Ak4_j5_pt, *NN_Ak4_j5_eta, *NN_Ak4_j5_phi, *NN_Ak4_j5_E, *NN_Ak4_j5_m, *NN_Ak4_j5_btag, *NN_Ak4_j6_pt, *NN_Ak4_j6_eta, *NN_Ak4_j6_phi, *NN_Ak4_j6_E, *NN_Ak4_j6_m, *NN_Ak4_j6_btag, *NN_N_Ak8, *NN_Ak8_j1_pt, *NN_Ak8_j1_eta, *NN_Ak8_j1_phi, *NN_Ak8_j1_E, *NN_Ak8_j1_mSD, *NN_Ak8_j1_tau21, *NN_Ak8_j1_tau32, *NN_Ak8_j2_pt, *NN_Ak8_j2_eta, *NN_Ak8_j2_phi, *NN_Ak8_j2_E, *NN_Ak8_j2_mSD, *NN_Ak8_j2_tau21, *NN_Ak8_j2_tau32, *NN_Ak8_j3_pt, *NN_Ak8_j3_eta, *NN_Ak8_j3_phi, *NN_Ak8_j3_E, *NN_Ak8_j3_mSD, *NN_Ak8_j3_tau21, *NN_Ak8_j3_tau32, *NN_M_tt_weighted, *NN_M_tt_notweighted;
 
-//TH1F *DNN_out0, *DNN_out1, *DNN_out2, *DNN_out3;
+//TH1F *QCD_out0;
 
 TH2F *dRmin_ptrel_mu, *dRmin_ptrel_mu1, *dRmin_ptrel_ele, *dRmin_ptrel_ele1;
 
@@ -62,10 +62,6 @@ uhh2::Event::Handle<ZprimeCandidate*> h_BestZprimeCandidateChi2;
 uhh2::Event::Handle<ZprimeCandidate*> h_BestZprimeCandidateCorrectMatch;
 uhh2::Event::Handle<std::vector<ReconstructionHypothesis>> h_ttbar_hyps;
 //uhh2::Event::Handle<float> h_chi2;
-/*uhh2::Event::Handle<double> h_NNoutput0;
-uhh2::Event::Handle<double> h_NNoutput1;
-uhh2::Event::Handle<double> h_NNoutput2;
-uhh2::Event::Handle<double> h_NNoutput3;
-*/
+//uhh2::Event::Handle<double> h_NNoutput0;
   virtual ~ZprimeSemiLeptonicHists();
 };
