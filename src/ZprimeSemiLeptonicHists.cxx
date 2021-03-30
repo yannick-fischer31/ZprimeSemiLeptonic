@@ -27,7 +27,6 @@ Hists(ctx, dirname) {
   h_BestZprimeCandidateCorrectMatch = ctx.get_handle<ZprimeCandidate*>("ZprimeCandidateBestCorrectMatch");
   h_is_zprime_reconstructed_chi2 = ctx.get_handle<bool>("is_zprime_reconstructed_chi2");
   h_is_zprime_reconstructed_correctmatch = ctx.get_handle<bool>("is_zprime_reconstructed_correctmatch");
-  //h_NNoutput0 = ctx.get_handle<double>("NNoutput0");
   //  h_chi2 = ctx.get_handle<float>("chi2");
   init();
 }
@@ -468,7 +467,6 @@ void ZprimeSemiLeptonicHists::init(){
   NN_M_tt_notweighted = book<TH1F>("NN_M_tt_notweighted", "NN_M_tt_notweighted", 100, 0, 14000);
 
 
-  //QCD_out0 = book<TH1F>("QCD_out0", "QCD NN output 0", 100, 0, 1);
 }
 
 
@@ -1219,11 +1217,6 @@ void ZprimeSemiLeptonicHists::fill(const Event & event){
     NN_M_tt_notweighted->Fill(Mass_tt);
   }
 
-// QCD NN score
-//
-//  double NNoutput0= event.get(h_NNoutput0);
-//  QCD_out0->Fill(NNoutput0, weight);
-  
 
 } //Method
 

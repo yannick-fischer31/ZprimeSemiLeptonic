@@ -9,7 +9,7 @@
 <!ENTITY IS_PUPPI            "true">
 <!ENTITY IS_LOOSER_SELECTION "false">
 <!ENTITY CHANNEL             "muon">
-<!ENTITY OUTPUTdir           "/nfs/dust/cms/user/deleokse/RunII_102X_v2/ZPrime_Original/ZPrime_2018/Analysis_applyQCD_score/&CHANNEL;/">
+<!ENTITY OUTPUTdir           "/nfs/dust/cms/user/deleokse/RunII_102X_v2/ZPrime_Original/ZPrime_2018/Analysis_applyQCD_score_test/&CHANNEL;/">
 
 <!ENTITY DATA_SingleMuon_Run2018A   SYSTEM  "../data/Skimming_datasets_2018_QCDVars/DATA_DATA_SingleMuon_Run2018A_blinded_withoutEmptyNtuples.xml">
 <!ENTITY DATA_SingleMuon_Run2018B   SYSTEM  "../data/Skimming_datasets_2018_QCDVars/DATA_DATA_SingleMuon_Run2018B_blinded_withoutEmptyNtuples.xml">

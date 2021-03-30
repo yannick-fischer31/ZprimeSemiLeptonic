@@ -33,6 +33,7 @@
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicModules.h>
 #include <UHH2/ZprimeSemiLeptonic/include/TTbarLJHists.h>
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicHists.h>
+#include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicMulticlassNNHists.h>
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicGeneratorHists.h>
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeCandidate.h>
 
@@ -385,6 +386,9 @@ protected:
 
   uhh2::Event::Handle<ZprimeCandidate*> h_BestZprimeCandidateChi2;
 
+  // DNN multiclass output hist
+  std::unique_ptr<Hists> h_MulticlassNN_output;
+
   // Configuration
   bool isMC, ispuppi, islooserselection;
   string Sys_MuonID, Sys_MuonTrigger, Sys_PU, Sys_btag, Sys_EleID, Sys_EleTrigger;
@@ -687,6 +691,7 @@ ZprimeAnalysisModule_applyNN::ZprimeAnalysisModule_applyNN(uhh2::Context& ctx){
   vector<string> histogram_tags = {"Weights", "Weights_MuonID", "Weights_EleID", "Weights_PU", "Weights_Lumi", "Weights_TopPt", "Weights_MCScale", "NLOCorrections", "Muon1", "TriggerMuon", "Muon2", "Electron1", "TriggerEle", "TwoDCut", "Jet1", "Jet2", "MET", "HTlep", "NNInputsBeforeReweight", "MatchableBeforeChi2Cut", "NotMatchableBeforeChi2Cut", "CorrectMatchBeforeChi2Cut", "NotCorrectMatchBeforeChi2Cut", "Chi2", "Matchable", "NotMatchable", "CorrectMatch", "NotCorrectMatch", "TopTagReconstruction", "NotTopTagReconstruction", "Btags2", "Btags1","TopJetBtagSubjet", "DNN_output0", "DNN_output0_TopTag", "DNN_output0_NoTopTag", "DNN_output1", "DNN_output1_TopTag", "DNN_output1_NoTopTag", "DNN_output2", "DNN_output2_TopTag", "DNN_output2_NoTopTag"};
   book_histograms(ctx, histogram_tags);
 
+  h_MulticlassNN_output.reset(new ZprimeSemiLeptonicMulticlassNNHists(ctx, "MulticlassNN"));
 
   h_Ak4_j1_E   = ctx.get_handle<float>("Ak4_j1_E");
   h_Ak4_j1_deepjetbscore   = ctx.get_handle<float>("Ak4_j1_deepjetbscore");
@@ -935,6 +940,8 @@ bool ZprimeAnalysisModule_applyNN::process(uhh2::Event& event){
   double out2 = (double)(NNoutputs[0].tensor<float, 2>()(0,2));
   vector<double> out_event = {out0, out1, out2};
 
+  h_MulticlassNN_output->fill(event);
+
   double max_score = 0.0;
   for ( int i = 0; i < 3; i++ ) {
     if ( out_event[i] > max_score) {
@@ -1026,5 +1033,5 @@ bool ZprimeAnalysisModule_applyNN::process(uhh2::Event& event){
 */
   return true;
 }
-
+ 
 UHH2_REGISTER_ANALYSIS_MODULE(ZprimeAnalysisModule_applyNN)

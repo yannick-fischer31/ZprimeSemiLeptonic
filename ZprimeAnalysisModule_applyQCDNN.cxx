@@ -34,7 +34,7 @@
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicModules.h>
 #include <UHH2/ZprimeSemiLeptonic/include/TTbarLJHists.h>
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicHists.h>
-#include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicDNNHists.h>
+#include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicQCDNNHists.h>
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicGeneratorHists.h>
 #include <UHH2/ZprimeSemiLeptonic/include/ZprimeCandidate.h>
 
@@ -318,7 +318,7 @@ protected:
 
   uhh2::Event::Handle<ZprimeCandidate*> h_BestZprimeCandidateChi2;
 
-  // DNN output hist
+  // QCD NN output hist
   std::unique_ptr<Hists> h_QCDNN_output;
 
   // Configuration
@@ -387,7 +387,7 @@ protected:
   Event::Handle<float> h_st_lep;
 
   Event::Handle<std::vector<tensorflow::Tensor> > h_NNoutput;
-  Event::Handle<double> h_NNoutput0;
+  Event::Handle<double> h_NNoutputQCD;
   
   std::unique_ptr<NeuralNetworkModule> NNModule;
   
@@ -599,7 +599,7 @@ ZprimeAnalysisModule_applyQCDNN::ZprimeAnalysisModule_applyQCDNN(uhh2::Context& 
   vector<string> histogram_tags = {"Weights", "Weights_MuonID", "Weights_EleID", "Weights_PU", "Weights_Lumi", "Weights_BTag", "Weights_TopPt", "Weights_MCScale", "Muon1", "TriggerMuon", "Muon2", "Electron1", "TriggerEle", "TwoDCut", "Jet1", "Jet2", "MET", "HTlep", "NNInputsBeforeReweight_out0", "NNInputsBeforeReweight_out1", "MatchableBeforeChi2Cut", "NotMatchableBeforeChi2Cut", "CorrectMatchBeforeChi2Cut", "NotCorrectMatchBeforeChi2Cut", "Chi2", "Matchable", "NotMatchable", "CorrectMatch", "NotCorrectMatch", "TopTagReconstruction", "NotTopTagReconstruction", "Btags2", "Btags1","TopJetBtagSubjet", "QCD_output0", "QCD_output1"};
   book_histograms(ctx, histogram_tags);
 
-  h_QCDNN_output.reset(new ZprimeSemiLeptonicDNNHists(ctx, "QCDNN")); 
+  h_QCDNN_output.reset(new ZprimeSemiLeptonicQCDNNHists(ctx, "QCDNN")); 
 
   h_dR_jet_Ak8Puppijet = ctx.get_handle<float> ("dR_jet_Ak8Puppijet");
   h_dR_mu_Ak8Puppijet = ctx.get_handle<float> ("dR_mu_Ak8Puppijet");
@@ -658,7 +658,7 @@ ZprimeAnalysisModule_applyQCDNN::ZprimeAnalysisModule_applyQCDNN(uhh2::Context& 
   h_st_lep = ctx.get_handle<float> ("st_lep");
 
   h_NNoutput = ctx.get_handle<std::vector<tensorflow::Tensor>>("NNoutput");
-  h_NNoutput0 = ctx.declare_event_output<double>("NNoutput0");
+  h_NNoutputQCD = ctx.declare_event_output<double>("NNoutputQCD");
   NNModule.reset( new NeuralNetworkModule(ctx, "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/ZprimeSemiLeptonic/KerasNN/NN_QCD_Titas/model_withoutweight.pb", "/nfs/dust/cms/user/deleokse/RunII_102X_v2/CMSSW_10_2_17/src/UHH2/ZprimeSemiLeptonic/KerasNN/NN_QCD_Titas/model_withoutweight.config.pbtxt"));
   
 
@@ -868,7 +868,7 @@ bool ZprimeAnalysisModule_applyQCDNN::process(uhh2::Event& event){
   NNModule->process(event);
   std::vector<tensorflow::Tensor> NNoutputs = NNModule->GetOutputs();
 
-  event.set(h_NNoutput0, (double)(NNoutputs[0].tensor<float, 2>()(0,0)));
+  event.set(h_NNoutputQCD, (double)(NNoutputs[0].tensor<float, 2>()(0,0)));
   event.set(h_NNoutput, NNoutputs);
 
   double out0 = (double)(NNoutputs[0].tensor<float, 2>()(0,0));
