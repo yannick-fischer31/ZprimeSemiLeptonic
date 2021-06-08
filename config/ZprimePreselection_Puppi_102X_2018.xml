@@ -2,7 +2,7 @@
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd" [
 
 <!ENTITY TargetLumi      "59740">
-<!ENTITY PRESELdir       "/nfs/dust/cms/user/fischery/RunII_102X_v2/ZPrime_2018/Preselection_2018/">
+<!ENTITY PRESELdir       "/nfs/dust/cms/user/fischery/Analysis/CMSSW_10_2_17/src/UHH2/ZprimeSemiLeptonic/Preselection">
 
 <!ENTITY b_Cacheable     "False">
 <!ENTITY NEVT            "-1">
@@ -17,7 +17,7 @@
 <!ENTITY DATA_SingleMuon_Run2018C   SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunC.xml">
 <!ENTITY DATA_EGamma_Run2018D       SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/DATA_EGamma2018_RunD.xml">
 <!ENTITY DATA_SingleMuon_Run2018D   SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/DATA_SingleMuon2018_RunD.xml">
-
+-->
 <!ENTITY TTToSemiLeptonic_2018          SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonic.xml">
 <!ENTITY TTToHadronic_2018              SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_TTToHadronic.xml">
 <!ENTITY TTTo2L2Nu_2018                 SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_TTTo2L2Nu.xml">
@@ -39,7 +39,7 @@
 <!ENTITY DYJetsToLL_M-50_HT-800to1200_2018      SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_DYJetsToLL_M-50_HT-800to1200.xml">
 <!ENTITY DYJetsToLL_M-50_HT-1200to2500_2018     SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_DYJetsToLL_M-50_HT-1200to2500.xml">
 <!ENTITY DYJetsToLL_M-50_HT-2500toInf_2018      SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_DYJetsToLL_M-50_HT-2500toInf.xml">
-
+<!--
 
 <!ENTITY ZprimeToTTJet_M500_2018  SYSTEM     "../../common/UHH2-datasets/RunII_102X_v1/2018/ZprimeToTTbar/MC_ZprimeToTTJet_M500.xml">
 <!ENTITY ZprimeToTTJet_M750_2018  SYSTEM     "../../common/UHH2-datasets/RunII_102X_v1/2018/ZprimeToTTbar/MC_ZprimeToTTJet_M750.xml">
@@ -99,7 +99,7 @@
 <!ENTITY ZprimeToTT_M7000_W70_2018 SYSTEM   "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_ZprimeToTT_M7000_W70.xml">
 <!ENTITY ZprimeToTT_M8000_W80_2018 SYSTEM   "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_ZprimeToTT_M8000_W80.xml">
 <!ENTITY ZprimeToTT_M750_W7p5_2018 SYSTEM   "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_ZprimeToTT_M750_W7p5.xml">
-
+-->
 <!ENTITY WW_2018  SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_WW_TuneCP5_13TeV-pythia8.xml">
 <!ENTITY WZ_2018  SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_WZ_TuneCP5_13TeV-pythia8.xml">
 <!ENTITY ZZ_2018  SYSTEM  "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_ZZ_TuneCP5_13TeV-pythia8.xml">
@@ -121,7 +121,7 @@
 <!ENTITY QCD_HT1500to2000     SYSTEM "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_QCD_HT1500to2000_madgraph.xml">
 
 <!ENTITY QCD_HT2000toInf      SYSTEM "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_QCD_HT2000toInf_madgraph.xml">
--->
+
 <!ENTITY TTZToLLNuNu_2018      SYSTEM "../../common/UHH2-datasets/RunII_102X_v1/2018/MC_TTZToLLNuNu.xml">
 
 
@@ -138,7 +138,7 @@
 
 	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;">
 
-<!--
+
 	  <InputData Lumi="7432926.584" NEventsMax="&NEVT;" Type="MC" Version="ST_tW_antitop_5f_inclusiveDecays_2018" Cacheable="&b_Cacheable;">
 	    &ST_tW_antitop_5f_inclusiveDecays;
 	    <InputTree Name="AnalysisTree" />
@@ -193,7 +193,7 @@
 	    <OutputTree Name="AnalysisTree" />
 	  </InputData>
 
-
+<!--
 	  <InputData Lumi="198000" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTTJet_M500_2018" Cacheable="&b_Cacheable;">
 	    &ZprimeToTTJet_M500_2018;
 	    <InputTree Name="AnalysisTree" />
@@ -447,6 +447,8 @@
             <OutputTree Name="AnalysisTree" />
           </InputData>
 				-->
+
+
 <!--
 
           <InputData Lumi="180809" NEventsMax="&NEVT;" Type="MC" Version="ZprimeToTT_M1000_W10_2018" Cacheable="&b_Cacheable;">
@@ -527,7 +529,9 @@
             <OutputTree Name="AnalysisTree" />
           </InputData>
 -->
-<!--
+
+
+
 
 	  <InputData Lumi="21906.58658" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNu_HT-70To100_2018" Cacheable="&b_Cacheable;">
 	    &WJetsToLNu_HT-70To100_2018;
@@ -576,7 +580,7 @@
 	    <InputTree Name="AnalysisTree" />
 	    <OutputTree Name="AnalysisTree" />
 	  </InputData>
-
+<!--
 	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_EGamma_Run2018A" Cacheable="&b_Cacheable;">
 	    &DATA_EGamma_Run2018A;
 	    <InputTree Name="AnalysisTree" />
@@ -624,7 +628,7 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
           </InputData>
-
+-->
 	  <InputData Lumi="83703610.93" NEventsMax="&NEVT;" Type="MC" Version="TTToSemiLeptonic_2018" Cacheable="&b_Cacheable;">
 	    &TTToSemiLeptonic_2018;
 	    <InputTree Name="AnalysisTree" />
@@ -742,7 +746,7 @@
             <InputTree Name="AnalysisTree"/>
             <OutputTree Name="AnalysisTree"/>
           </InputData>
--->
+
 					   <InputData Lumi="12735907.83" NEventsMax="&NEVT;" Type="MC" Version="TTZToLLNuNu_2018" Cacheable="&b_Cacheable;">
             &TTZToLLNuNu_2018;
             <InputTree Name="AnalysisTree"/>

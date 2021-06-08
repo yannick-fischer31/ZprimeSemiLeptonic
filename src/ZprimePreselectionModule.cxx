@@ -141,7 +141,7 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
 
 
 
-  // GEN Flavor selection [W+jets flavor-splitting] 
+  // GEN Flavor selection [W+jets flavor-splitting]
   if(ctx.get("dataset_version").find("WJets") != std::string::npos){
 
     if     (ctx.get("dataset_version").find("_B") != std::string::npos) genflavor_sel.reset(new GenFlavorSelection("b"));
@@ -156,8 +156,8 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
   // Cleaning: Mu, Ele, Jets
   const MuonId muonID(AndId<Muon>(PtEtaCut(muon_pt, 2.4), muID));
   const ElectronId electronID(AndId<Electron>(PtEtaSCCut(electron_pt, 2.5), eleID));
-  const JetPFID jetID_CHS(JetPFID::WP_TIGHT_CHS); 
-  const JetPFID jetID_PUPPI(JetPFID::WP_TIGHT_PUPPI); 
+  const JetPFID jetID_CHS(JetPFID::WP_TIGHT_CHS);
+  const JetPFID jetID_PUPPI(JetPFID::WP_TIGHT_PUPPI);
 
   jet_IDcleaner.reset(new JetCleaner(ctx, jetID_PUPPI));
   jet_cleaner1.reset(new JetCleaner(ctx, 15., 3.0));
@@ -167,7 +167,7 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
   topjet_puppi_IDcleaner.reset(new TopJetCleaner(ctx, jetID_PUPPI, "toppuppijets"));
   topjet_puppi_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "toppuppijets"));
 
-  
+
 
   // common modules
   common.reset(new CommonModules());
@@ -176,8 +176,8 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
   common->disable_jetpfidfilter();
   common->switch_jetPtSorter(true);
   common->switch_metcorrection(true);
-  common->set_muon_id(muonID);  
-  common->set_electron_id(electronID);  
+  common->set_muon_id(muonID);
+  common->set_electron_id(electronID);
   common->init(ctx, Sys_PU);
 
   topjetCorr.reset(new TopJetCorrections());
@@ -193,7 +193,7 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
 
 
   // Book histograms
-  vector<string> histogram_tags = {"Input", "CommonModules", "Lepton1", "JetID", "JetCleaner1", "JetCleaner2", "TopjetCleaner", "Jet1", "Jet2", "MET"};
+  vector<string> histogram_tags = {"Input", "CommonModules", "Lepton1", "Lepton2", "Btag1", "Btag2", "JetID", "JetCleaner1", "JetCleaner2", "TopjetCleaner", "Jet1", "Jet2", "MET"};
   book_histograms(ctx, histogram_tags);
 
   lumihists.reset(new LuminosityHists(ctx, "lumi"));
@@ -226,7 +226,7 @@ cout << "--- CHS Top jet pt = " << topjet.pt() << "     "  << "jet eta = " << to
 chsjetInd++;
 }
 */
-
+//cout<<"Weigh before: "<<event.weight<<endl;
   //cout<<"Getting started... "<<event.event<<endl;
   fill_histograms(event, "Input");
 
@@ -239,6 +239,7 @@ chsjetInd++;
   } else {
   topjetCorr->process(event);
   }
+  //cout<<"Weight after"<<event.weight<<endl;
   //cout<<"TopJEC_JLC ... "<<event.event<<endl;
   //cout<<"Common Modules... "<<event.event<<endl;
 
@@ -249,7 +250,15 @@ chsjetInd++;
   //fill_histograms(event, "Metfilters");
   ////  cout<<"Met filters ... "<<event.event<<endl;
 
+  jet_IDcleaner->process(event);
+  fill_histograms(event, "JetID");
+
+  jet_cleaner1->process(event);
+  sort_by_pt<Jet>(*event.jets);
+  fill_histograms(event, "JetCleaner1");
+
   // GEN ME quark-flavor selection
+
   if(!event.isRealData){
     if(!genflavor_sel->passes(event)) return false;
   }
@@ -261,12 +270,26 @@ chsjetInd++;
 
   fill_histograms(event, "Lepton1");
 
-  jet_IDcleaner->process(event);
-  fill_histograms(event, "JetID");
+  const bool pass_lep2 = ((event.muons->size() >= 2) || (event.electrons->size() >= 2));
+  if(!pass_lep2) return false;
 
-  jet_cleaner1->process(event);
-  sort_by_pt<Jet>(*event.jets);
-  fill_histograms(event, "JetCleaner1");
+  fill_histograms(event, "Lepton2");
+
+  int Nbjets_medium = 0;
+  CSVBTag Btag_medium = CSVBTag(CSVBTag::WP_MEDIUM);
+
+
+  for (unsigned int i =0; i<event.jets->size(); i++) {
+    if(Btag_medium(event.jets->at(i),event)) Nbjets_medium++;
+  }
+  const bool pass_btag1 = (Nbjets_medium >= 1);
+  if(!pass_btag1) return false;
+  fill_histograms(event, "Btag1");
+
+  const bool pass_btag2 = (Nbjets_medium >= 2);
+  if(!pass_btag2) return false;
+  fill_histograms(event, "Btag2");
+
   //cout<<"JetCleaner1 ... "<<event.event<<endl;
 
   // Lepton-2Dcut variables
