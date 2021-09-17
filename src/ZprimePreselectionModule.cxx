@@ -50,12 +50,12 @@ protected:
 
   // Corrections
   std::unique_ptr<CommonModules>   common;
-  std::unique_ptr<TopJetCorrections> topjetCorr;
-  std::unique_ptr<TopPuppiJetCorrections> toppuppijetCorr;
+  //std::unique_ptr<TopJetCorrections> topjetCorr;
+  //std::unique_ptr<TopPuppiJetCorrections> toppuppijetCorr;
 
   // Cleaners
   std::unique_ptr<JetCleaner>                      jet_IDcleaner, jet_cleaner1, jet_cleaner2;
-  std::unique_ptr<TopJetCleaner>                   topjet_puppi_IDcleaner, topjet_puppi_cleaner, topjet_IDcleaner, topjet_cleaner;
+  //std::unique_ptr<TopJetCleaner>                   topjet_puppi_IDcleaner, topjet_puppi_cleaner, topjet_IDcleaner, topjet_cleaner;
 
   // Selections
   //std::unique_ptr<uhh2::AndSelection> metfilters_sel;
@@ -86,7 +86,8 @@ void ZprimePreselectionModule::fill_histograms(uhh2::Event& event, string tag){
     HFolder(mytag)->fill(event);
 }
 
-
+  bool isSignal;
+  bool isRest;
 
 ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
 
@@ -119,7 +120,7 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
     muID  = MuonID(Muon::CutBasedIdTight); // see more muonIDs https://github.com/cms-sw/cmssw/blob/master/DataFormats/MuonReco/interface/Muon.h#L201
   }
   double electron_pt(50.);
-  double muon_pt(55.);
+  double muon_pt(20.);
   double jet1_pt(50.);
   double jet2_pt(20.);
   double MET(50.);
@@ -154,18 +155,19 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
 
 
   // Cleaning: Mu, Ele, Jets
-  const MuonId muonID(AndId<Muon>(PtEtaCut(muon_pt, 2.4), muID));
+  const MuonId muonID(AndId<Muon>(PtEtaCut(muon_pt, 2.4), muID, MuonIso(0.15)));
+  const MuonId muonID2(AndId<Muon>(PtEtaCut(muon_pt, 2.4), MuonIso(0.15)));
   const ElectronId electronID(AndId<Electron>(PtEtaSCCut(electron_pt, 2.5), eleID));
   const JetPFID jetID_CHS(JetPFID::WP_TIGHT_CHS);
   const JetPFID jetID_PUPPI(JetPFID::WP_TIGHT_PUPPI);
 
   jet_IDcleaner.reset(new JetCleaner(ctx, jetID_PUPPI));
-  jet_cleaner1.reset(new JetCleaner(ctx, 15., 3.0));
+  jet_cleaner1.reset(new JetCleaner(ctx, 30., 2.4));
   jet_cleaner2.reset(new JetCleaner(ctx, 30., 2.4));
-  topjet_IDcleaner.reset(new TopJetCleaner(ctx, jetID_CHS, "topjets"));
-  topjet_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "topjets"));
-  topjet_puppi_IDcleaner.reset(new TopJetCleaner(ctx, jetID_PUPPI, "toppuppijets"));
-  topjet_puppi_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "toppuppijets"));
+  //topjet_IDcleaner.reset(new TopJetCleaner(ctx, jetID_CHS, "topjets"));
+  //topjet_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "topjets"));
+  //topjet_puppi_IDcleaner.reset(new TopJetCleaner(ctx, jetID_PUPPI, "toppuppijets"));
+  //topjet_puppi_cleaner.reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4)), "toppuppijets"));
 
 
 
@@ -174,17 +176,26 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
   common->switch_jetlepcleaner(true);
   common->disable_pvfilter();
   common->disable_jetpfidfilter();
+  common->disable_metfilters();
+    if(ctx.get("dataset_version").find("Delphes") != std::string::npos){
+
+        common->disable_jersmear();
+        common->disable_jec();
+        common->set_muon_id(muonID2);
+    }
+    else{
+        common->set_muon_id(muonID);
+    }
   common->switch_jetPtSorter(true);
   common->switch_metcorrection(true);
-  common->set_muon_id(muonID);
   common->set_electron_id(electronID);
   common->init(ctx, Sys_PU);
 
-  topjetCorr.reset(new TopJetCorrections());
-  topjetCorr->init(ctx);
+  //topjetCorr.reset(new TopJetCorrections());
+  //topjetCorr->init(ctx);
 
-  toppuppijetCorr.reset(new TopPuppiJetCorrections());
-  toppuppijetCorr->init(ctx);
+  //toppuppijetCorr.reset(new TopPuppiJetCorrections());
+  //toppuppijetCorr->init(ctx);
 
   //// EVENT SELECTION
   jet1_sel.reset(new NJetSelection(1, -1, JetId(PtEtaCut(jet1_pt, 2.4))));
@@ -193,10 +204,15 @@ ZprimePreselectionModule::ZprimePreselectionModule(uhh2::Context& ctx){
 
 
   // Book histograms
-  vector<string> histogram_tags = {"Input", "CommonModules", "Lepton1", "Lepton2", "Btag1", "Btag2", "JetID", "JetCleaner1", "JetCleaner2", "TopjetCleaner", "Jet1", "Jet2", "MET"};
+  vector<string> histogram_tags = {"Input", "CommonModules", "Lepton1", "Lepton2", "Zwindow", "Njets2","Btag1", "Btag2", "Njets6","JetID", "JetCleaner1", "JetCleaner2", "TopjetCleaner", "Jet1", "Jet2", "MET"};
   book_histograms(ctx, histogram_tags);
 
   lumihists.reset(new LuminosityHists(ctx, "lumi"));
+
+
+  isSignal = (ctx.get("dataset_version").find("TTZsignal") != std::string::npos);
+  isRest = (ctx.get("dataset_version").find("TTZToLLNuNu") != std::string::npos);
+
 }
 
 
@@ -230,20 +246,105 @@ chsjetInd++;
   //cout<<"Getting started... "<<event.event<<endl;
   fill_histograms(event, "Input");
 
+/*
+  cout<<"New event"<<endl;
+  int Njets=event.jets->size();
+  for( int n=0; n<Njets;n++){
+    cout<<"Jet: "<<n<<" Pt: "<<event.jets->at(n).pt()<<" Eta: "<<event.jets->at(n).eta()<<endl;
+}
+*/
+
   bool commonResult = common->process(event);
+  //cout<<"Common result: "<<commonResult<<endl;
+
   if (!commonResult) return false;
   sort_by_pt<Muon>(*event.muons);
   sort_by_pt<Electron>(*event.electrons);
+  /*
   if(ispuppi){
   toppuppijetCorr->process(event);
   } else {
-  topjetCorr->process(event);
+  /topjetCorr->process(event);
   }
+  */
   //cout<<"Weight after"<<event.weight<<endl;
   //cout<<"TopJEC_JLC ... "<<event.event<<endl;
   //cout<<"Common Modules... "<<event.event<<endl;
-
+  cout<<"Number of muons"<<event.muons->size()<<endl;
   fill_histograms(event, "CommonModules");
+
+//check daughters
+
+/*
+  for(const auto & gp : *event.genparticles){
+    cout<<"Enter loop"<<endl;
+     if(fabs(gp.pdgId()) == 23){
+       cout<<"It is a Z!"<<endl;
+       cout<<"Its dasughter IDs are: "<<gp.daughter(event.genparticles,1)->pdgId()<<" and "<<gp.daughter(event.genparticles,2)->pdgId()<<endl;
+
+       }
+     }
+*/
+  //Cut out events from signal
+
+//cout<<"Point 1"<<endl;
+  //  bool signal;
+  /*
+   TH1* Hadr = new TH1I("Hadr", "Number of Hadrins", 4, 0, 4);
+      int NHadr=0;
+      bool Zmu= false;
+    if(isSignal||isRest){
+cout<<"This is the signal sample!"<<endl;
+          for(const auto & gp : *event.genparticles){
+            cout<<"Enter loop"<<endl;
+
+             if(fabs(gp.pdgId()) == 6){
+               cout<<"It is a top!"<<endl;
+               cout<<"Its dasughter IDs are: "<<gp.daughter(event.genparticles,1)->pdgId()<<" and "<<gp.daughter(event.genparticles,2)->pdgId()<<endl;
+               auto b = gp.daughter(event.genparticles,1);
+               auto W = gp.daughter(event.genparticles,2);
+               if(fabs(W->pdgId()) == 5 && fabs(b->pdgId()) == 24){
+                 b = gp.daughter(event.genparticles,2);
+                 W = gp.daughter(event.genparticles,1);
+               }
+               if(fabs(W->pdgId()) == 24 && fabs(b->pdgId()) == 5){
+               cout<<"Genparticles matched!"<<endl;
+    cout<<"Its dasughter IDs are: "<<W->daughter(event.genparticles,1)->pdgId()<<" and "<<W->daughter(event.genparticles,2)->pdgId()<<endl;
+               auto Wd1 = W->daughter(event.genparticles,1);
+               auto Wd2 = W->daughter(event.genparticles,2);
+               if(fabs(Wd1->pdgId()) < 7 && fabs(Wd2->pdgId()) < 7){
+                 NHadr ++;
+               }
+               }
+             }
+             if(gp.pdgId()==23){
+               auto mu = gp.daughter(event.genparticles,1);
+               if(fabs(mu->pdgId())==13){
+                 Zmu = true;
+               }
+             }
+
+           }
+           Hadr->Fill(NHadr, 1);
+
+  cout<<"Number of Hadrons: "<<NHadr<<endl;
+  cout<<"Z decaying into two muons is"<<Zmu<<endl;
+  if(isSignal){
+if(NHadr!=2||!Zmu){
+  return false;
+}
+}
+if(isRest){
+  if(NHadr==2&&Zmu){
+    return false;
+  }
+}
+
+    }
+
+
+*/
+
 
   //// MET filters
   //if(!metfilters_sel->passes(event)) return false;
@@ -264,35 +365,74 @@ chsjetInd++;
   }
 
     //cout<<"GEN ME quark-flavor selection ... "<<event.event<<endl;
+cout<<"Number of muons"<<event.muons->size()<<endl;
 
-  const bool pass_lep1 = ((event.muons->size() >= 1) || (event.electrons->size() >= 1));
+  const bool pass_lep1 = ((event.muons->size() >= 1) && (event.electrons->size() == 0));
   if(!pass_lep1) return false;
 
   fill_histograms(event, "Lepton1");
 
-  const bool pass_lep2 = ((event.muons->size() >= 2) || (event.electrons->size() >= 2));
+  const bool pass_lep2 = ((event.muons->size() == 2) && (event.electrons->size() == 0));
   if(!pass_lep2) return false;
 
+//cout<<"Pt 1: "<<event.muons->at(0).pt()<<" Pt 2: "<<event.muons->at(1).pt()  <<" Sum: "<<((event.muons->at(0).v4() + event.muons->at(1).v4()).pt())<<endl;
   fill_histograms(event, "Lepton2");
 
-  int Nbjets_medium = 0;
-  CSVBTag Btag_medium = CSVBTag(CSVBTag::WP_MEDIUM);
+ bool pass_Zmass=false;
+if(event.muons->size()==2){
+  cout<<"Invmass mu: "<<fabs((event.muons->at(0).v4()+event.muons->at(1).v4()).M())<<endl;
+ pass_Zmass = ((fabs((event.muons->at(0).v4()+event.muons->at(1).v4()).M())> 80) && (fabs((event.muons->at(0).v4()+event.muons->at(1).v4()).M())<100));
+}
+cout<<pass_Zmass<<endl;
 
+if(event.electrons->size()==2){
+  pass_Zmass = (((event.electrons->at(0).v4()+event.electrons->at(1).v4()).M()> 80) && ((event.electrons->at(0).v4()+event.electrons->at(1).v4()).M()<100));
+}
+
+  if(!pass_Zmass) return false;
+  fill_histograms(event, "Zwindow");
+
+  const bool pass_Njets2 =(event.jets->size()>=2);
+  if(!pass_Njets2) return false;
+  fill_histograms(event, "Njets2");
+
+
+ DeepJetBTag Btag_medium = DeepJetBTag(DeepJetBTag::WP_MEDIUM);
+  int Nbjets_medium = 0;
+  //CSVBTag Btag_medium = CSVBTag(CSVBTag::WP_MEDIUM);
+  //BTag::algo btag_algo = BTag::DEEPJET;
+  //BTag::wp btag_wp_medium = BTag::WP_MEDIUM;
+  //JetId id_btag = BTag(btag_algo, btag_wp_medium);
+
+
+  //std::unique_ptr<Selection> sel_1btag, sel_2btag;
+
+  //sel_1btag.reset(new NJetSelection(1, -1, id_btag));
+  //sel_2btag.reset(new NJetSelection(2,-1, id_btag));
 
   for (unsigned int i =0; i<event.jets->size(); i++) {
     if(Btag_medium(event.jets->at(i),event)) Nbjets_medium++;
   }
-  const bool pass_btag1 = (Nbjets_medium >= 1);
-  if(!pass_btag1) return false;
-  fill_histograms(event, "Btag1");
 
-  const bool pass_btag2 = (Nbjets_medium >= 2);
-  if(!pass_btag2) return false;
+  //const bool pass_btag1 = (Nbjets_medium >= 1);
+  //cout<<"Passes btag selection? "<<sel_1btag->passes(event)<<endl;
+  if(Nbjets_medium<1) return false;
+  fill_histograms(event, "Btag1");
+  cout<<"One B-jet!"<<endl;
+
+  //const bool pass_btag2 = (Nbjets_medium >= 2);
+  if(Nbjets_medium<2) return false;
   fill_histograms(event, "Btag2");
+  cout<<"Two B-Jets!"<<endl;
+
+  const bool pass_Njets6 =(event.jets->size()>=6);
+  if(!pass_Njets6) return false;
+  fill_histograms(event, "Njets6");
 
   //cout<<"JetCleaner1 ... "<<event.event<<endl;
 
   // Lepton-2Dcut variables
+  /*
   for(auto& muo : *event.muons){
 
     float    dRmin, pTrel;
@@ -310,20 +450,19 @@ chsjetInd++;
     ele.set_tag(Electron::twodcut_dRmin, dRmin);
     ele.set_tag(Electron::twodcut_pTrel, pTrel);
   }
-
-
+*/
   jet_cleaner2->process(event);
   sort_by_pt<Jet>(*event.jets);
   fill_histograms(event, "JetCleaner2");
     //cout<<"JetCleaner2 ... "<<event.event<<endl;
 
-  topjet_IDcleaner->process(event);
-  topjet_cleaner->process(event);
-  sort_by_pt<TopJet>(*event.topjets);
+  //topjet_IDcleaner->process(event);
+  //topjet_cleaner->process(event);
+  //sort_by_pt<TopJet>(*event.topjets);
 
-  topjet_puppi_IDcleaner->process(event);
-  topjet_puppi_cleaner->process(event);
-  sort_by_pt<TopJet>(*event.toppuppijets);
+  //topjet_puppi_IDcleaner->process(event);
+  //topjet_puppi_cleaner->process(event);
+  //sort_by_pt<TopJet>(*event.toppuppijets);
   fill_histograms(event, "TopjetCleaner");
     //cout<<"TopjetCleaner ... "<<event.event<<endl;
 

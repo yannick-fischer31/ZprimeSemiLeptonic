@@ -28,6 +28,7 @@ void ZprimeSemiLeptonicPreselectionHists::init(){
 
   // jets
   N_jets            = book<TH1F>("N_jets", "N_{jets}", 21, -0.5, 20.5);
+  N_genjets            = book<TH1F>("N_genjets", "N_{genjets}", 21, -0.5, 20.5);
   pt_jet            = book<TH1F>("pt_jet", "p_{T}^{jets} [GeV]", 50, 0, 1500);
   pt_jet1           = book<TH1F>("pt_jet1", "p_{T}^{jet 1} [GeV]", 50, 0, 1500);
   pt_jet2           = book<TH1F>("pt_jet2", "p_{T}^{jet 2} [GeV]", 50, 0, 1500);
@@ -44,17 +45,20 @@ void ZprimeSemiLeptonicPreselectionHists::init(){
   m_jet1            = book<TH1F>("m_jet1", "m^{jet 1}", 50, 0, 500);
   m_jet2            = book<TH1F>("m_jet2", "m^{jet 2}", 50, 0, 500);
   m_jet3            = book<TH1F>("m_jet3", "m^{jet 3}", 50, 0, 500);
-  csv_jet           = book<TH1F>("csv_jet", "CSV^{jets}", 20, 0, 1);
-  csv_jet1          = book<TH1F>("csv_jet1", "CSV^{jet 1}", 20, 0, 1);
-  csv_jet2          = book<TH1F>("csv_jet2", "CSV^{jet 2}", 20, 0, 1);
-  csv_jet3          = book<TH1F>("csv_jet3", "CSV^{jet 3}", 20, 0, 1);
+
+  csv_jet           = book<TH1F>("csv_jet", "DJ^{jets}", 20, 0, 1);
+  csv_jet1          = book<TH1F>("csv_jet1", "DJ^{jet 1}", 20, 0, 1);
+  csv_jet2          = book<TH1F>("csv_jet2", "DJ^{jet 2}", 20, 0, 1);
+  csv_jet3          = book<TH1F>("csv_jet3", "DJ^{jet 3}", 20, 0, 1);
+
   N_bJets_loose     = book<TH1F>("N_bJets_loose", "N_{jets}^{CSV loose}", 11, -0.5, 10.5);
   N_bJets_med       = book<TH1F>("N_bJets_med", "N_{jets}^{CSV medium}", 11, -0.5, 10.5);
   N_bJets_tight     = book<TH1F>("N_bJets_tight", "N_{jets}^{CSV tight}", 11, -0.5, 10.5);
 
   // leptons
+
   N_mu              = book<TH1F>("N_mu", "N^{#mu}", 11, -0.5, 10.5);
-  pt_mu             = book<TH1F>("pt_mu", "p_{T}^{#mu} [GeV]", 50, 0, 1500);
+  pt_mu             = book<TH1F>("pt_mu", "p_{T}^{#mu} [GeV]", 50, 0, 400);
   pt_mu1            = book<TH1F>("pt_mu1", "p_{T}^{#mu 1} [GeV]", 50, 0, 1500);
   pt_mu2            = book<TH1F>("pt_mu2", "p_{T}^{#mu 2} [GeV]", 50, 0, 1500);
   eta_mu            = book<TH1F>("eta_mu", "#eta^{#mu}", 50, -2.5, 2.5);
@@ -69,6 +73,7 @@ void ZprimeSemiLeptonicPreselectionHists::init(){
   reliso_mu_rebin   = book<TH1F>("reliso_mu_rebin", "#mu rel. Iso ", 400, 0, 5);
   reliso_mu1_rebin  = book<TH1F>("reliso_mu1_rebin", "#mu 1 rel. Iso ", 400, 0, 5);
   reliso_mu2_rebin  = book<TH1F>("reliso_mu2_rebin", "#mu 2 rel. Iso ", 400, 0, 5);
+  /*
   N_ele             = book<TH1F>("N_ele", "N^{e}", 11, -0.5, 10.5);
   pt_ele            = book<TH1F>("pt_ele", "p_{T}^{e} [GeV]", 50, 0, 1500);
   pt_ele1           = book<TH1F>("pt_ele1", "p_{T}^{e 1} [GeV]", 50, 0, 1500);
@@ -85,7 +90,10 @@ void ZprimeSemiLeptonicPreselectionHists::init(){
   reliso_ele_rebin  = book<TH1F>("reliso_ele_rebin", "e rel. Iso", 400, 0, 5);
   reliso_ele1_rebin = book<TH1F>("reliso_ele1_rebin", "e 1 rel. Iso", 400, 0, 5);
   reliso_ele2_rebin = book<TH1F>("reliso_ele2_rebin", "e 2 rel. Iso", 400, 0, 5);
+  */
   M_mumu            = book<TH1F>("M_mumu", "M_{#mu#mu} [GeV]",75 , 0, 500);
+    pt_Z            = book<TH1F>("pt_Z", "p_{T}^{Z} [GeV]",20 , 0, 700);
+  /*
   M_ee              = book<TH1F>("M_ee", "M_{ee} [GeV]",75 , 0, 500);
 
   dRmin_mu_jet          = book<TH1F>("dRmin_mu_jet", "#DeltaR_{min}(#mu, jet)", 60, 0, 3);
@@ -242,7 +250,7 @@ void ZprimeSemiLeptonicPreselectionHists::init(){
   S22 = book<TH1F>("S22", "S_{22}", 50, 0, 1);
   S23 = book<TH1F>("S23", "S_{23}", 50, 0, 1);
   S33 = book<TH1F>("S33", "S_{33}", 50, 0, 1);
-
+*/
   sum_event_weights = book<TH1F>("sum_event_weights", "counting experiment", 1, 0.5, 1.5);
 
 }
@@ -251,7 +259,8 @@ void ZprimeSemiLeptonicPreselectionHists::init(){
 void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
 
   double weight = event.weight;
-
+  //double weight = 62760*1/10000;
+cout<<"weight: "<<weight<<" event weight: "<<event.weight;
 
 
   /*
@@ -264,9 +273,13 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
 
   vector<Jet>* jets = event.jets;
   int Njets = jets->size();
+  int Ngenjets=event.genjets->size();
   N_jets->Fill(Njets, weight);
+  N_genjets->Fill(Ngenjets, weight);
+  //cout <<"Number of jets"<<Njets<<endl;
 
   for(unsigned int i=0; i<jets->size(); i++){
+    //cout<<"PT of Jet at "<<i<<" : "<<jets->at(i).pt()<<endl;
     pt_jet->Fill(jets->at(i).pt(),weight);
     eta_jet->Fill(jets->at(i).eta(),weight);
     phi_jet->Fill(jets->at(i).phi(),weight);
@@ -284,21 +297,24 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
       eta_jet2->Fill(jets->at(i).eta(),weight);
       phi_jet2->Fill(jets->at(i).phi(),weight);
       m_jet2->Fill(jets->at(i).v4().M(),weight);
-      csv_jet2->Fill(jets->at(i).btag_combinedSecondaryVertex(), weight);
+      //csv_jet2->Fill(jets->at(i).btag_combinedSecondaryVertex(), weight);
     }
     else if(i==2){
       pt_jet3->Fill(jets->at(i).pt(),weight);
       eta_jet3->Fill(jets->at(i).eta(),weight);
       phi_jet3->Fill(jets->at(i).phi(),weight);
       m_jet3->Fill(jets->at(i).v4().M(),weight);
-      csv_jet3->Fill(jets->at(i).btag_combinedSecondaryVertex(), weight);
+      //csv_jet3->Fill(jets->at(i).btag_combinedSecondaryVertex(), weight);
     }
   }
 
   int Nbjets_loose = 0, Nbjets_medium = 0, Nbjets_tight = 0;
-  CSVBTag Btag_loose = CSVBTag(CSVBTag::WP_LOOSE);
-  CSVBTag Btag_medium = CSVBTag(CSVBTag::WP_MEDIUM);
-  CSVBTag Btag_tight = CSVBTag(CSVBTag::WP_TIGHT);
+  //CSVBTag Btag_loose = CSVBTag(CSVBTag::WP_LOOSE);
+  //CSVBTag Btag_medium = CSVBTag(CSVBTag::WP_MEDIUM);
+  //CSVBTag Btag_tight = CSVBTag(CSVBTag::WP_TIGHT);
+   DeepJetBTag Btag_loose = DeepJetBTag(DeepJetBTag::WP_LOOSE);
+   DeepJetBTag Btag_medium = DeepJetBTag(DeepJetBTag::WP_MEDIUM);
+   DeepJetBTag Btag_tight = DeepJetBTag(DeepJetBTag::WP_TIGHT);
 
   for (unsigned int i =0; i<jets->size(); i++) {
     if(Btag_loose(jets->at(i),event))  Nbjets_loose++;
@@ -317,7 +333,7 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
   █ ██   ██ ██  ██  ██   ██ ██      ██   ██      ██     ██   ██ ██         ██         ██
   █ ██   ██ ██   ██  █████   ██████ ██   ██ ███████      █████  ███████    ██    ███████
   */
-
+/*
   vector<TopJet>* AK8CHSjets = event.topjets;
   unsigned int NAK8CHSjets = AK8CHSjets->size();
   N_AK8CHSjets->Fill(NAK8CHSjets, weight);
@@ -409,7 +425,7 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
   █ ██   ██ ██  ██  ██   ██ ██      ██    ██ ██      ██      ██
   █ ██   ██ ██   ██  █████  ██       ██████  ██      ██      ██
   */
-
+/*
   vector<TopJet>* AK8Puppijets = event.toppuppijets;
   unsigned int NAK8Puppijets = 0;
   for(unsigned int i=0; i<AK8Puppijets->size(); i++){
@@ -522,6 +538,7 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
       ptrel_mu_jet->Fill(muons->at(i).get_tag(Muon::twodcut_pTrel), weight);
       dRmin_ptrel_mu->Fill(muons->at(i).get_tag(Muon::twodcut_dRmin), muons->at(i).get_tag(Muon::twodcut_pTrel), weight);
     }
+
     if(i==0){
       pt_mu1->Fill(muons->at(i).pt(),weight);
       eta_mu1->Fill(muons->at(i).eta(),weight);
@@ -535,6 +552,7 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
         dRmin_ptrel_mu1->Fill(muons->at(i).get_tag(Muon::twodcut_dRmin), muons->at(i).get_tag(Muon::twodcut_pTrel), weight);
       }
     }
+
     else if(i==1){
       pt_mu2->Fill(muons->at(i).pt(),weight);
       eta_mu2->Fill(muons->at(i).eta(),weight);
@@ -547,18 +565,24 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
   for(int i=0; i<Nmuons; i++){
     for(int j=0; j<Nmuons; j++){
       if(j <= i) continue;
-      M_mumu->Fill((muons->at(i).v4() + muons->at(j).v4()).M() ,weight);
+    //  cout<<muons->at(i).v4()<<endl;
+        //    cout<<muons->at(j).v4()<<endl;
+      //            cout<<(muons->at(i).v4()).M()<<endl;
+      //        cout<<(muons->at(j).v4()+muons->at(j).v4()).M()<<endl;
+      M_mumu->Fill(fabs((muons->at(i).v4() + muons->at(j).v4()).M()) ,weight);
+      pt_Z->Fill(((muons->at(i).v4() + muons->at(j).v4()).pt()) ,weight);
     }
+
   }
 
-  /*
+/*
   ███████ ██      ███████  ██████ ████████ ██████   ██████  ███    ██ ███████
   ██      ██      ██      ██         ██    ██   ██ ██    ██ ████   ██ ██
   █████   ██      █████   ██         ██    ██████  ██    ██ ██ ██  ██ ███████
   ██      ██      ██      ██         ██    ██   ██ ██    ██ ██  ██ ██      ██
   ███████ ███████ ███████  ██████    ██    ██   ██  ██████  ██   ████ ███████
   */
-
+/*
 
   vector<Electron>* electrons = event.electrons;
   int Nelectrons = electrons->size();
@@ -613,7 +637,7 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
   ██   ██ ██      ██  ██ ██ ██      ██   ██ ██   ██ ██
   ██████  ███████ ██   ████ ███████ ██   ██ ██   ██ ███████
   */
-
+/*
 
 
   int Npvs = event.pvs->size();
@@ -669,7 +693,8 @@ void ZprimeSemiLeptonicPreselectionHists::fill(const Event & event){
   S23->Fill(s23, weight);
   S33->Fill(s33, weight);
 
-
+*/
+//cout<<"Weight"<<endl;
   sum_event_weights->Fill(1., weight);
 
 
